@@ -45,4 +45,13 @@ public class PedidoServiceImpl implements PedidoService {
 
         return pedido;
     }
+
+    @Override
+    public List<Object[]> countPedidosByMonthAndYear() {
+        return pedidoRepository.countPedidosByMonthAndYear();
+    }
+    @Override
+    public List<Object[]> countPedidosByInstrumento() {
+        return pedidoRepository.countPedidosByInstrumento();
+    }
 }

@@ -5,6 +5,12 @@ import com.example.instrumentos_api.Entities.Pedido;
 
 import java.util.List;
 
+
+
+
 public interface PedidoService {
     Pedido guardarPedido(List<Instrumento> instrumentos);
+    List<Object[]> countPedidosByMonthAndYear();
+    List<Object[]> countPedidosByInstrumento();// Añadir esta línea
 }
+

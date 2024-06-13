@@ -24,8 +24,9 @@ public class Pedido {
 
     private Double totalPedido;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoDetalle> detalles;
+
 
 
 }
