@@ -1,7 +1,10 @@
 package com.example.instrumentos_api;
 
 import com.example.instrumentos_api.Entities.Instrumento;
+import com.example.instrumentos_api.Entities.Usuario;
+import com.example.instrumentos_api.Repositories.UsuarioRepository;
 import com.example.instrumentos_api.Services.impl.InstrumentoServiceImpl;
+import com.example.instrumentos_api.Utils.EncryptionUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -39,13 +43,27 @@ public class InstrumentosApiApplication {
 				System.out.println("No se pudo guardar los instrumentos: " + e.getMessage());
 			}
 		};
+
 	}
-	@Bean
+	@Configuration
+	public class LoadDatabase {
+		@Bean
+		public CommandLineRunner initDatabase(UsuarioRepository repository) {
+			return args -> {
+				repository.save(new Usuario("admin", EncryptionUtils.encryptPassword("adminpass"), "Admin"));
+				repository.save(new Usuario("operador", EncryptionUtils.encryptPassword("operadorpass"), "Operador"));
+			};
+		}
+	}
+		@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*").allowedOrigins("http://localhost:5173/").allowedMethods("").allowedHeaders("*");
+				registry.addMapping("/**")  // Asegúrate de que permite todas las rutas
+						.allowedOrigins("http://localhost:5173")
+						.allowedMethods("*")
+						.allowedHeaders("*");
 			}
 		};
 	}
