@@ -3,7 +3,9 @@ package com.example.instrumentos_api.Repositories;
 import com.example.instrumentos_api.Entities.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
@@ -16,5 +18,16 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "FROM PedidoDetalle pd " +
             "GROUP BY pd.instrumento.instrumento")
     List<Object[]> countPedidosByInstrumento();
+
+    @Query("SELECT p.fechaPedido AS fechaPedido, " +
+            "pd.instrumento.instrumento AS instrumento, " +
+            "pd.instrumento.marca AS marca, " +
+            "pd.instrumento.modelo AS modelo, " +
+            "pd.cantidad AS cantidad, " +
+            "pd.instrumento.precio * pd.cantidad AS subtotal " +
+            "FROM PedidoDetalle pd " +
+            "JOIN pd.pedido p")
+    List<Object[]> generarReporteCompleto();
+
 
 }

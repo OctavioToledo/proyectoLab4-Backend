@@ -1,4 +1,4 @@
-package com.example.instrumentos_api.Services.impl;
+package com.example.instrumentos_api.Services.Impl;
 
 import com.example.instrumentos_api.Entities.Instrumento;
 import com.example.instrumentos_api.Entities.Pedido;
@@ -53,5 +53,11 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<Object[]> countPedidosByInstrumento() {
         return pedidoRepository.countPedidosByInstrumento();
+    }
+
+    @Override
+    public List<Object[]> generarReporteCompleto() {
+        List<Object[]> reporte = pedidoRepository.generarReporteCompleto();
+        return reporte;
     }
 }
