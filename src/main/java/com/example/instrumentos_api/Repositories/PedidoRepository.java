@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "GROUP BY pd.instrumento.instrumento")
     List<Object[]> countPedidosByInstrumento();
 
+
     @Query("SELECT p.fechaPedido AS fechaPedido, " +
             "pd.instrumento.instrumento AS instrumento, " +
             "pd.instrumento.marca AS marca, " +
@@ -26,8 +28,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "pd.cantidad AS cantidad, " +
             "pd.instrumento.precio * pd.cantidad AS subtotal " +
             "FROM PedidoDetalle pd " +
-            "JOIN pd.pedido p")
-    List<Object[]> generarReporteCompleto();
-
-
+            "JOIN pd.pedido p " +
+            "WHERE p.fechaPedido BETWEEN :startDate AND :endDate")
+    List<Object[]> generarReportePorFechas(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
+
+

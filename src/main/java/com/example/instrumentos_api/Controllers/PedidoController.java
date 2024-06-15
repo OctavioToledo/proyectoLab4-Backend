@@ -15,6 +15,7 @@ import com.example.instrumentos_api.Entities.Instrumento;
 import com.example.instrumentos_api.Entities.Pedido;
 import com.example.instrumentos_api.Services.PedidoService;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -49,10 +50,12 @@ public class PedidoController {
 
 
     @GetMapping("/reporteExcel")
-    public ResponseEntity<Object> generarReporteExcel() {
+    public ResponseEntity<Object> generarReporteExcel(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         try {
             // Obtener los datos del reporte desde el servicio de pedidos
-            List<Object[]> reporteData = pedidoService.generarReporteCompleto();
+            List<Object[]> reporteData = pedidoService.generarReportePorFechas(startDate, endDate);
 
             // Generar el reporte en formato Excel
             byte[] reporteBytes = reporteService.generarReporteExcel(reporteData);
@@ -64,10 +67,12 @@ public class PedidoController {
 
             return new ResponseEntity<>(reporteBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al generar el reporte: " + e.getMessage());
         }
     }
+
 
 
 }

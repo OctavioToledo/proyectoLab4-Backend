@@ -9,6 +9,8 @@ import com.example.instrumentos_api.Services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -55,9 +57,12 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.countPedidosByInstrumento();
     }
 
+
     @Override
-    public List<Object[]> generarReporteCompleto() {
-        List<Object[]> reporte = pedidoRepository.generarReporteCompleto();
-        return reporte;
+    public List<Object[]> generarReportePorFechas(LocalDate startDate, LocalDate endDate) {
+        Date start = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return pedidoRepository.generarReportePorFechas(start, end);
     }
+
 }
